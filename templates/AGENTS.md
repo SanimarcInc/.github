@@ -29,8 +29,7 @@ Ces règles sont obligatoires. Une PR qui ne les respecte pas est bloquée par l
 - **Tu découvres un autre problème** (bug, dette technique, faille) qui sort du sujet ? Ne le corrige pas dans la même PR : **crée une nouvelle issue** et mentionne-la dans l'issue en cours (« Découvert : #<no> »).
 - Ne commite jamais de secret, de `.env` ni de donnée réelle.
 - Ne pousse jamais directement sur `main`, `master`, `dev`, `demo` ou `prod`.
-- **Versions et changelog** : ils sont générés automatiquement à partir des commits (release-please). `feat` = version mineure, `fix` = correctif, `feat!` ou `BREAKING CHANGE:` = version majeure. Ne modifie jamais `CHANGELOG.md` ni le numéro de version à la main.
-- **PR des robots** : ne modifie pas les PR de Dependabot ni celles de release-please, sauf si on te le demande.
+- **PR des robots** : ne modifie pas les PR de Dependabot, sauf si on te le demande.
 
 ## Fiche du repo : toujours à jour
 

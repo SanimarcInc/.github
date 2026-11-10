@@ -55,9 +55,6 @@ Exemples : `feat(projet): filtre multiple des livrables (#142)`, `fix(acces): un
 - **CI** compile et lance les tests, selon la stack du repo.
 - **Dependabot** ouvre chaque lundi des PR de mise à jour des dépendances, et tout de suite pour une faille de sécurité.
 
-### Versions et releases
-Les versions et le `CHANGELOG.md` sont générés à partir des commits par release-please : `feat` = version mineure, `fix` = correctif, `feat!` ou `BREAKING CHANGE:` = version majeure. Une PR « chore: release x.y.z » se tient à jour toute seule ; la merger crée la release. On ne modifie jamais le changelog ni la version à la main.
-
 ## 5. Règles pour les agents AI
 
 Les agents (Claude Code, Codex, Copilot, Cursor…) suivent exactement le même standard. En plus :

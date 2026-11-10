@@ -18,8 +18,6 @@ Tout repo qui n'a pas ses propres fichiers en hérite automatiquement :
 | `ci-dotnet.yml` | restore, build, test .NET | `uses: SanimarcInc/.github/.github/workflows/ci-dotnet.yml@main` |
 | `ci-node.yml` | install, lint, test, build Node | `uses: SanimarcInc/.github/.github/workflows/ci-node.yml@main` |
 | `ci-php.yml` | syntaxe PHP, composer, tests Laravel en option | `uses: SanimarcInc/.github/.github/workflows/ci-php.yml@main` |
-| `release.yml` | Versions, CHANGELOG et releases automatiques (release-please) | `templates/release.yml` (secret `ORG_AUTOMATION_TOKEN`) |
-| `project-sync.yml` | Remplit le Kanban de l'organisation toutes les 15 minutes | — (tourne ici, secret `ORG_AUTOMATION_TOKEN`) |
 
 ## Modèles (`templates/`)
 À copier dans un repo existant. Pour un **nouveau** repo, partez plutôt du repo modèle [`SanimarcInc/template-projet`](https://github.com/SanimarcInc/template-projet) (*Use this template*), qui contient déjà tout.
