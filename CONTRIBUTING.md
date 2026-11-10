@@ -49,12 +49,16 @@ Exemples : `feat(projet): filtre multiple des livrables (#142)`, `fix(acces): un
 
 Les agents (Claude Code, Codex, Copilot, Cursor…) suivent exactement le même standard. En plus :
 
-1. **Créer l'issue** avant de commencer si elle n'existe pas (`gh issue create`), avec contexte, objectif et critères d'acceptation.
-2. **Nommer la branche** selon la section 2, jamais avec un nom aléatoire.
-3. **Documenter sur l'issue** : un commentaire à la création de la branche (nom de la branche et plan), puis un à l'ouverture de la PR.
-4. **Remplir la PR au complet** : titre au format, toutes les sections du template, `Closes #`.
-5. **Ne jamais pousser directement** sur `main`, `master`, `dev`, `demo` ou `prod`.
-6. **Ne jamais commiter de secret** (`.env`, mot de passe, clé, token).
+1. **Une issue pour chaque chose, sans exception.** L'agent cherche si l'issue existe, la crée sinon (`gh issue create`) avec contexte, objectif et critères d'acceptation, et se l'assigne. Une demande avec plusieurs sujets = plusieurs issues.
+2. **L'agent gère ses issues lui-même** : il coche les critères au fur et à mesure, commente les décisions et les blocages, et ferme l'issue avec une explication si le travail est abandonné.
+3. **Un problème découvert en chemin** devient une nouvelle issue. Il n'est pas corrigé dans la même PR.
+4. **Nommer la branche** selon la section 2, jamais avec un nom aléatoire.
+5. **Documenter sur l'issue** : un commentaire à la création de la branche (nom de la branche et plan), puis un à l'ouverture de la PR.
+6. **Remplir la PR au complet** : titre au format, toutes les sections du template, `Closes #`.
+7. **Ne jamais pousser directement** sur `main`, `master`, `dev`, `demo` ou `prod`.
+8. **Ne jamais commiter de secret** (`.env`, mot de passe, clé, token).
+
+Le détail des instructions que suivent les agents est dans [`templates/AGENTS.md`](templates/AGENTS.md).
 
 ## 6. Identité git
 
