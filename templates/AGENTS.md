@@ -51,7 +51,7 @@ Si la fiche est vide ou fausse alors que ta PR ne touche pas ces sujets, corrige
    - Titre : `type(portée): description (#no-issue)`
    - Description : **toutes** les sections du template remplies (Contexte, Changements, Comment tester, Impacts / risques), plus `Closes #<no-issue>`. Coche « Généré ou modifié par un agent AI ».
 2. Commente l'issue avec le lien de la PR et ce qui reste à valider par un humain.
-3. Une revue automatique par Claude et la CI tournent sur la PR. Si on te le demande, corrige les points soulevés dans la même branche.
+3. pr-guard et la CI tournent sur la PR. S'ils échouent, corrige dans la même branche avant de demander une revue.
 4. Ne merge pas toi-même, sauf si on te le demande explicitement. L'issue se ferme toute seule au merge grâce à `Closes #`.
 5. Si le travail est abandonné : ferme l'issue avec `gh issue close <no> --reason "not planned"` et un commentaire qui explique pourquoi, puis supprime la branche.
 

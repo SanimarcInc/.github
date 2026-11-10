@@ -52,7 +52,6 @@ Exemples : `feat(projet): filtre multiple des livrables (#142)`, `fix(acces): un
 
 ### Automatique sur chaque PR
 - **pr-guard** vérifie le standard (branche, titre, description, issue liée).
-- **Claude** fait une revue de code et commente la PR. Écrire `@claude` dans un commentaire lui demande d'expliquer, de corriger ou de faire un travail.
 - **CI** compile et lance les tests, selon la stack du repo.
 - **Dependabot** ouvre chaque lundi des PR de mise à jour des dépendances, et tout de suite pour une faille de sécurité.
 

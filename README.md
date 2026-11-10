@@ -14,11 +14,11 @@ Tout repo qui n'a pas ses propres fichiers en hérite automatiquement :
 | Workflow | Rôle | Appel depuis un repo |
 |---|---|---|
 | `pr-guard.yml` | Vérifie branche, titre, description et issue liée ; étiquette `agent-ai` | `templates/pr-guard.yml` |
-| `claude.yml` | Revue de code automatique des PR par Claude, et réponse aux mentions `@claude` | `templates/claude.yml` (secret `ANTHROPIC_API_KEY`) |
+| `claude.yml` | *(non activé : pas de clé API)* Revue de code automatique des PR par Claude, et réponse aux mentions `@claude` | `templates/claude.yml` (secret `ANTHROPIC_API_KEY`) |
 | `ci-dotnet.yml` | restore, build, test .NET | `uses: SanimarcInc/.github/.github/workflows/ci-dotnet.yml@main` |
 | `ci-node.yml` | install, lint, test, build Node | `uses: SanimarcInc/.github/.github/workflows/ci-node.yml@main` |
 | `ci-php.yml` | syntaxe PHP, composer, tests Laravel en option | `uses: SanimarcInc/.github/.github/workflows/ci-php.yml@main` |
-| `release.yml` | Versions, CHANGELOG et releases automatiques (release-please) | `templates/release.yml` |
+| `release.yml` | Versions, CHANGELOG et releases automatiques (release-please) | `templates/release.yml` (secret `ORG_AUTOMATION_TOKEN`) |
 | `project-sync.yml` | Remplit le Kanban de l'organisation toutes les 15 minutes | — (tourne ici, secret `ORG_AUTOMATION_TOKEN`) |
 
 ## Modèles (`templates/`)

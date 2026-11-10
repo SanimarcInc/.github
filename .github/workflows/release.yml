@@ -2,23 +2,28 @@
 # À chaque push sur la branche de base, release-please tient à jour une PR « chore: release x.y.z »
 # qui contient le CHANGELOG.md et le nouveau numéro de version. Merger cette PR crée le tag et la release GitHub.
 # Le repo appelant doit contenir release-please-config.json et .release-please-manifest.json.
+# Secret ORG_AUTOMATION_TOKEN : nécessaire tant que l'organisation interdit aux Actions de créer des PR.
 name: release
 on:
   workflow_call:
+    secrets:
+      ORG_AUTOMATION_TOKEN:
+        required: false
 
 jobs:
   release-please:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
-      - id: rp
-        continue-on-error: true
+      - id: token
+        env:
+          TOKEN: ${{ secrets.ORG_AUTOMATION_TOKEN }}
+        run: |
+          if [ -z "$TOKEN" ]; then echo "::notice::Secret ORG_AUTOMATION_TOKEN absent : release sautée."; echo "ok=false" >> "$GITHUB_OUTPUT"; else echo "ok=true" >> "$GITHUB_OUTPUT"; fi
+      - if: steps.token.outputs.ok == 'true'
         uses: googleapis/release-please-action@v4
         with:
-          token: ${{ github.token }}
+          token: ${{ secrets.ORG_AUTOMATION_TOKEN }}
           target-branch: ${{ github.ref_name }}
           config-file: release-please-config.json
           manifest-file: .release-please-manifest.json
-      - if: steps.rp.outcome == 'failure'
-        run: |
-          echo "::warning::release-please n'a pas pu créer sa PR de release. Cause la plus fréquente : le réglage de l'organisation « Allow GitHub Actions to create and approve pull requests » est désactivé (Settings > Actions > General). Un owner doit l'activer."
