@@ -1,0 +1,34 @@
+# Remplit le Kanban « Développement - SanimarcInc » avec les issues et PR de tous les repos.
+# Nécessite le secret PROJECT_SYNC_TOKEN (token fin : Organization > Projects R/W, Repository > Issues + Pull requests + Metadata R).
+name: project-sync
+on:
+  schedule:
+    - cron: "*/15 * * * *"
+  workflow_dispatch:
+    inputs:
+      days:
+        description: "Inclure les éléments fermés depuis N jours"
+        default: "14"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: project-sync
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/github-script@v7
+        env:
+          DAYS: ${{ github.event.inputs.days || '2' }}
+        with:
+          github-token: ${{ secrets.PROJECT_SYNC_TOKEN }}
+          script: |
+            const { run } = require('./.github/scripts/project-sync.js');
+            const counts = await run(github.graphql, { days: Number(process.env.DAYS) });
+            core.info(JSON.stringify(counts));
+            if (counts.errors > 0) core.warning(`${counts.errors} élément(s) en erreur`);
