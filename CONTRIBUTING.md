@@ -57,6 +57,7 @@ Les agents (Claude Code, Codex, Copilot, Cursor…) suivent exactement le même 
 6. **Remplir la PR au complet** : titre au format, toutes les sections du template, `Closes #`.
 7. **Ne jamais pousser directement** sur `main`, `master`, `dev`, `demo` ou `prod`.
 8. **Ne jamais commiter de secret** (`.env`, mot de passe, clé, token).
+9. **Tenir la fiche du repo à jour** (description, site web, sujets) et le README, chaque fois qu'une PR change le but, la stack ou l'URL du repo.
 
 Le détail des instructions que suivent les agents est dans [`templates/AGENTS.md`](templates/AGENTS.md).
 

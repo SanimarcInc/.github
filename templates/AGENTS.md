@@ -28,6 +28,20 @@ Ces règles sont obligatoires. Une PR qui ne les respecte pas est bloquée par l
 - Ne commite jamais de secret, de `.env` ni de donnée réelle.
 - Ne pousse jamais directement sur `main`, `master`, `dev`, `demo` ou `prod`.
 
+## Fiche du repo : toujours à jour
+
+La fiche du repo (section « About » sur GitHub) et le README décrivent ce que le repo fait **aujourd'hui**. Tu les tiens à jour toi-même.
+
+**Avant d'ouvrir une PR**, vérifie la fiche avec `gh repo view --json description,homepageUrl,repositoryTopics`. Si ta PR change le but du repo, sa stack, ses modules principaux ou son URL, mets à jour :
+- **Description** : 1 ou 2 phrases, 350 caractères maximum, en français. Ce que fait le repo, pour qui, et la stack principale entre parenthèses.
+  `gh repo edit --description "…"`
+- **Site web** : l'URL de l'app déployée, s'il y en a une (`gh repo edit --homepage "…"`). Jamais d'URL inventée.
+- **Sujets** : de 3 à 6 sujets, en minuscules avec des tirets. Le domaine (`infor-m3`, `dynamics-365`…), le type (`api`, `etl`, `portail`…) et la stack (`dotnet`, `php`, `react`…).
+  `gh repo edit --add-topic <sujet>` et `--remove-topic <sujet>`
+- **README** : à quoi sert le repo, la stack, comment le lancer et le tester, sa structure. Mets-le à jour dans la même PR.
+
+Si la fiche est vide ou fausse alors que ta PR ne touche pas ces sujets, corrige-la quand même et mentionne-le dans la PR. Si tu n'as pas les droits pour modifier la fiche, écris la description et les sujets proposés dans la PR.
+
 ## Pour terminer
 1. Ouvre la PR avec `gh pr create` :
    - Titre : `type(portée): description (#no-issue)`

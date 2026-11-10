@@ -21,4 +21,5 @@ Closes #
 - [ ] Le titre suit le format `type(portée): description (#issue)`
 - [ ] La branche suit le format `type/no-issue-description`
 - [ ] Aucun secret ni donnée réelle dans le code
+- [ ] README et fiche du repo (description, sujets, site web) à jour si le but, la stack ou l'URL ont changé
 - [ ] Généré ou modifié par un agent AI (cocher si oui)
