@@ -1,0 +1,8 @@
+# À copier dans chaque repo : .github/workflows/pr-guard.yml
+name: pr-guard
+on:
+  pull_request:
+    types: [opened, edited, synchronize, reopened]
+jobs:
+  pr-guard:
+    uses: SanimarcInc/.github/.github/workflows/pr-guard.yml@main

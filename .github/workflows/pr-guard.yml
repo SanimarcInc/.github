@@ -1,0 +1,52 @@
+# Contrôle réutilisable des PR, appelé depuis chaque repo (voir templates/pr-guard.yml)
+name: pr-guard
+on:
+  workflow_call:
+
+permissions:
+  pull-requests: read
+
+jobs:
+  verifier:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Vérifier branche, titre, description et issue liée
+        env:
+          HEAD: ${{ github.event.pull_request.head.ref }}
+          BASE: ${{ github.event.pull_request.base.ref }}
+          TITLE: ${{ github.event.pull_request.title }}
+          BODY: ${{ github.event.pull_request.body }}
+          AUTHOR: ${{ github.event.pull_request.user.login }}
+        run: |
+          errors=0
+          fail() { echo "::error::$1"; errors=$((errors+1)); }
+
+          # Exceptions : dependabot, et promotions entre branches d'environnement
+          if [[ "$AUTHOR" == "dependabot[bot]" || "$HEAD" == dependabot/* ]]; then echo "Dependabot : ignoré"; exit 0; fi
+          ENV_RE='^(main|master|dev|demo|test|prod|release/[0-9]{4}-[0-9]{2}-[0-9]{2})$'
+          if [[ "$HEAD" =~ $ENV_RE && "$BASE" =~ $ENV_RE ]]; then
+            echo "Promotion $HEAD -> $BASE : seul le titre est vérifié"
+            [[ ${#TITLE} -ge 10 ]] || fail "Titre trop court pour une promotion ($HEAD -> $BASE)."
+            exit $errors
+          fi
+
+          # 1. Branche
+          BR_RE='^((feat|fix|chore|docs|refactor|test|perf|hotfix)/[0-9]+-[a-z0-9]+(-[a-z0-9]+)*|release/[0-9]{4}-[0-9]{2}-[0-9]{2})$'
+          [[ "$HEAD" =~ $BR_RE ]] || fail "Branche « $HEAD » hors standard. Attendu : type/no-issue-description (ex. feat/142-filtre-livrables)."
+
+          # 2. Titre
+          TI_RE='^(feat|fix|chore|docs|refactor|test|perf|hotfix|build|ci|revert)(\([a-z0-9._/-]+\))?!?: .{5,}$'
+          [[ "$TITLE" =~ $TI_RE ]] || fail "Titre « $TITLE » hors standard. Attendu : type(portée): description (#issue)."
+
+          # 3. Sections obligatoires remplies (commentaires HTML retirés)
+          CLEAN=$(printf '%s' "$BODY" | perl -0pe 's/<!--.*?-->//gs')
+          for s in "Contexte" "Changements" "Comment tester"; do
+            content=$(printf '%s\n' "$CLEAN" | awk -v s="## $s" '$0==s{f=1;next} /^## /{f=0} f' | grep -vE '^[[:space:]]*(-|[0-9]+\.)?[[:space:]]*$' || true)
+            [[ -n "$content" ]] || fail "Section « $s » vide dans la description."
+          done
+
+          # 4. Issue liée
+          printf '%s' "$CLEAN" | grep -qiE '(close[sd]?|fix(e[sd])?|resolve[sd]?) +#[0-9]+' || fail "Aucune issue liée. Ajoute « Closes #123 » dans la description."
+
+          if [[ $errors -gt 0 ]]; then echo "$errors problème(s). Voir https://github.com/SanimarcInc/.github/blob/main/CONTRIBUTING.md"; exit 1; fi
+          echo "PR conforme"

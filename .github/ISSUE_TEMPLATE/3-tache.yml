@@ -1,0 +1,22 @@
+name: Tâche
+description: Tâche technique, ménage, documentation, mise à jour
+body:
+  - type: textarea
+    id: quoi
+    attributes:
+      label: À faire
+    validations:
+      required: true
+  - type: textarea
+    id: pourquoi
+    attributes:
+      label: Pourquoi
+    validations:
+      required: true
+  - type: textarea
+    id: fini
+    attributes:
+      label: C'est fini quand…
+      placeholder: "- [ ] …"
+    validations:
+      required: true

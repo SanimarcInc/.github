@@ -1,0 +1,38 @@
+name: Bug
+description: Quelque chose ne fonctionne pas comme prévu
+labels: ["bug"]
+body:
+  - type: textarea
+    id: probleme
+    attributes:
+      label: Problème
+      description: Qu'est-ce qui se passe ?
+    validations:
+      required: true
+  - type: textarea
+    id: reproduire
+    attributes:
+      label: Étapes pour reproduire
+      placeholder: "1. Aller sur…\n2. Cliquer sur…\n3. Voir l'erreur"
+    validations:
+      required: true
+  - type: textarea
+    id: attendu
+    attributes:
+      label: Comportement attendu
+    validations:
+      required: true
+  - type: dropdown
+    id: env
+    attributes:
+      label: Environnement
+      options:
+        - Production
+        - Demo / Test
+        - Dev / local
+    validations:
+      required: true
+  - type: textarea
+    id: extra
+    attributes:
+      label: Captures, logs, autres infos

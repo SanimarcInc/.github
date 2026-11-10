@@ -1,0 +1,29 @@
+name: Fonctionnalité
+description: Nouvelle fonctionnalité ou amélioration
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: besoin
+    attributes:
+      label: Besoin
+      description: Qui a besoin de quoi, et pourquoi ?
+      placeholder: "En tant que <rôle>, je veux <action> afin de <bénéfice>."
+    validations:
+      required: true
+  - type: textarea
+    id: solution
+    attributes:
+      label: Solution proposée
+    validations:
+      required: true
+  - type: textarea
+    id: criteres
+    attributes:
+      label: Critères d'acceptation
+      placeholder: "- [ ] …\n- [ ] …"
+    validations:
+      required: true
+  - type: textarea
+    id: extra
+    attributes:
+      label: Notes, maquettes, liens
