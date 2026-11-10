@@ -1,0 +1,19 @@
+# Releases automatiques réutilisables (release-please), basées sur les Conventional Commits.
+# À chaque push sur la branche de base, release-please tient à jour une PR « chore: release x.y.z »
+# qui contient le CHANGELOG.md et le nouveau numéro de version. Merger cette PR crée le tag et la release GitHub.
+# Le repo appelant doit contenir release-please-config.json et .release-please-manifest.json.
+name: release
+on:
+  workflow_call:
+
+jobs:
+  release-please:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: googleapis/release-please-action@v4
+        with:
+          token: ${{ github.token }}
+          target-branch: ${{ github.ref_name }}
+          config-file: release-please-config.json
+          manifest-file: .release-please-manifest.json

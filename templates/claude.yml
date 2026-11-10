@@ -1,0 +1,24 @@
+# Claude : revue automatique des PR, et réponse quand un membre écrit @claude.
+# Logique : https://github.com/SanimarcInc/.github/blob/main/.github/workflows/claude.yml
+# Secret requis dans ce repo : ANTHROPIC_API_KEY
+name: claude
+on:
+  pull_request:
+    types: [opened, ready_for_review]
+  issue_comment:
+    types: [created]
+  pull_request_review_comment:
+    types: [created]
+  issues:
+    types: [opened]
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+  id-token: write
+  actions: read
+jobs:
+  claude:
+    uses: SanimarcInc/.github/.github/workflows/claude.yml@main
+    secrets:
+      ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}

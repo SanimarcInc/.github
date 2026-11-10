@@ -1,0 +1,12 @@
+# Releases automatiques (release-please) à partir des Conventional Commits.
+# Logique : https://github.com/SanimarcInc/.github/blob/main/.github/workflows/release.yml
+name: release
+on:
+  push:
+    branches: [__BASE__]
+permissions:
+  contents: write
+  pull-requests: write
+jobs:
+  release:
+    uses: SanimarcInc/.github/.github/workflows/release.yml@main

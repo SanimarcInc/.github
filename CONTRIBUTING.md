@@ -45,6 +45,20 @@ Exemples : `feat(projet): filtre multiple des livrables (#142)`, `fix(acces): un
 - Une PR = un sujet. Pour mettre une branche à jour, on fait un `git rebase` ou un `git merge` local, pas une PR de `main` vers la branche.
 - La branche est supprimée après le merge.
 
+### Étiquettes
+- Type : `bug`, `enhancement`, `documentation`, `securite`, `dette-technique` (`dependencies` est réservé à Dependabot)
+- Priorité : `p1-urgent`, `p2-important`, `p3-normal`
+- Autres : `agent-ai` (ajoutée automatiquement aux PR faites par un agent), `bloque`
+
+### Automatique sur chaque PR
+- **pr-guard** vérifie le standard (branche, titre, description, issue liée).
+- **Claude** fait une revue de code et commente la PR. Écrire `@claude` dans un commentaire lui demande d'expliquer, de corriger ou de faire un travail.
+- **CI** compile et lance les tests, selon la stack du repo.
+- **Dependabot** ouvre chaque lundi des PR de mise à jour des dépendances, et tout de suite pour une faille de sécurité.
+
+### Versions et releases
+Les versions et le `CHANGELOG.md` sont générés à partir des commits par release-please : `feat` = version mineure, `fix` = correctif, `feat!` ou `BREAKING CHANGE:` = version majeure. Une PR « chore: release x.y.z » se tient à jour toute seule ; la merger crée la release. On ne modifie jamais le changelog ni la version à la main.
+
 ## 5. Règles pour les agents AI
 
 Les agents (Claude Code, Codex, Copilot, Cursor…) suivent exactement le même standard. En plus :

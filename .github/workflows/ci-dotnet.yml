@@ -1,0 +1,41 @@
+# CI .NET réutilisable : restore, build, test.
+name: ci-dotnet
+on:
+  workflow_call:
+    inputs:
+      project:
+        description: "Solution ou projet à compiler (vide = dossier courant)"
+        type: string
+        default: ""
+      test-project:
+        description: "Projet ou solution de tests (vide = même que project ; 'none' = pas de tests)"
+        type: string
+        default: ""
+      working-directory:
+        type: string
+        default: "."
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        working-directory: ${{ inputs.working-directory }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: |
+            8.0.x
+            9.0.x
+            10.0.x
+      - name: Restore
+        run: dotnet restore ${{ inputs.project }}
+      - name: Build
+        run: dotnet build ${{ inputs.project }} --no-restore --configuration Release
+      - name: Test
+        if: inputs.test-project != 'none'
+        run: |
+          T="${{ inputs.test-project }}"; [ -z "$T" ] && T="${{ inputs.project }}"
+          dotnet test $T --configuration Release --verbosity normal

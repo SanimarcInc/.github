@@ -1,15 +1,32 @@
-# Contrôle réutilisable des PR, appelé depuis chaque repo (voir templates/pr-guard.yml)
+# Contrôle réutilisable des PR, appelé depuis chaque repo (voir templates/pr-guard.yml).
+# Vérifie la branche, le titre, la description et l'issue liée, et ajoute l'étiquette agent-ai aux PR faites par un agent.
 name: pr-guard
 on:
   workflow_call:
 
-permissions:
-  pull-requests: read
-
 jobs:
   verifier:
     runs-on: ubuntu-latest
+    timeout-minutes: 5
     steps:
+      - name: Étiquette agent-ai
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          NUMBER: ${{ github.event.pull_request.number }}
+          HEAD: ${{ github.event.pull_request.head.ref }}
+          BODY: ${{ github.event.pull_request.body }}
+        run: |
+          ai=false
+          printf '%s' "$BODY" | grep -qiE -- '-[[:space:]]*\[x\][[:space:]]*Généré ou modifié par un agent AI' && ai=true
+          [[ "$HEAD" == claude/* ]] && ai=true
+          if [ "$ai" = false ]; then
+            gh api "repos/$REPO/pulls/$NUMBER/commits?per_page=100" --jq '.[].commit | (.message + "\n" + .author.name)' \
+              | grep -qiE 'co-authored-by:[[:space:]]*(claude|copilot|codex|cursor)|^(claude|copilot|codex)' && ai=true
+          fi
+          if [ "$ai" = true ]; then gh api "repos/$REPO/issues/$NUMBER/labels" -f "labels[]=agent-ai" > /dev/null && echo "Étiquette agent-ai ajoutée"; fi
+
       - name: Vérifier branche, titre, description et issue liée
         env:
           HEAD: ${{ github.event.pull_request.head.ref }}
@@ -21,8 +38,11 @@ jobs:
           errors=0
           fail() { echo "::error::$1"; errors=$((errors+1)); }
 
-          # Exceptions : dependabot, et promotions entre branches d'environnement
+          # Exceptions : robots (dependabot, release-please)
           if [[ "$AUTHOR" == "dependabot[bot]" || "$HEAD" == dependabot/* ]]; then echo "Dependabot : ignoré"; exit 0; fi
+          if [[ "$HEAD" == release-please--* ]]; then echo "release-please : ignoré"; exit 0; fi
+
+          # Promotions entre branches d'environnement : seul le titre est vérifié
           ENV_RE='^(main|master|dev|demo|test|prod|release/[0-9]{4}-[0-9]{2}-[0-9]{2})$'
           if [[ "$HEAD" =~ $ENV_RE && "$BASE" =~ $ENV_RE ]]; then
             echo "Promotion $HEAD -> $BASE : seul le titre est vérifié"

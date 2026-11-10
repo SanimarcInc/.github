@@ -1,0 +1,59 @@
+# CI PHP réutilisable : vérification de syntaxe de tous les fichiers PHP, composer validate,
+# et en option les tests Laravel (php artisan test).
+name: ci-php
+on:
+  workflow_call:
+    inputs:
+      php-version:
+        type: string
+        default: "8.3"
+      working-directory:
+        type: string
+        default: "."
+      exclude:
+        description: "Expression régulière (grep -E) des chemins à ignorer pour la vérification de syntaxe"
+        type: string
+        default: "^\\./(vendor|node_modules)/"
+      composer:
+        description: "Lancer composer validate et composer install"
+        type: boolean
+        default: true
+      laravel-tests:
+        type: boolean
+        default: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        working-directory: ${{ inputs.working-directory }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ inputs.php-version }}
+          tools: composer
+          coverage: none
+      - name: Vérification de syntaxe PHP
+        env:
+          EXCLUDE: ${{ inputs.exclude }}
+        run: |
+          set -o pipefail
+          find . -name '*.php' -type f | grep -Ev "$EXCLUDE" | sort > /tmp/php-files.txt
+          echo "$(wc -l < /tmp/php-files.txt) fichiers PHP"
+          errors=0
+          while IFS= read -r f; do php -l "$f" > /tmp/lint.txt 2>&1 || { cat /tmp/lint.txt; errors=$((errors+1)); }; done < /tmp/php-files.txt
+          if [ $errors -gt 0 ]; then echo "::error::$errors fichier(s) PHP avec une erreur de syntaxe"; exit 1; fi
+      - name: Composer
+        if: inputs.composer && hashFiles(format('{0}/composer.json', inputs.working-directory)) != ''
+        run: |
+          composer validate --no-check-publish --no-check-all
+          composer install --no-interaction --no-progress --prefer-dist
+      - name: Tests Laravel
+        if: inputs.laravel-tests
+        run: |
+          [ -f .env ] || cp .env.example .env
+          php artisan key:generate --force
+          php artisan test
