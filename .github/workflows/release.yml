@@ -11,9 +11,14 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
-      - uses: googleapis/release-please-action@v4
+      - id: rp
+        continue-on-error: true
+        uses: googleapis/release-please-action@v4
         with:
           token: ${{ github.token }}
           target-branch: ${{ github.ref_name }}
           config-file: release-please-config.json
           manifest-file: .release-please-manifest.json
+      - if: steps.rp.outcome == 'failure'
+        run: |
+          echo "::warning::release-please n'a pas pu créer sa PR de release. Cause la plus fréquente : le réglage de l'organisation « Allow GitHub Actions to create and approve pull requests » est désactivé (Settings > Actions > General). Un owner doit l'activer."
