@@ -46,11 +46,15 @@ La fiche du repo (section « About » sur GitHub) et le README décrivent ce que
 Si la fiche est vide ou fausse alors que ta PR ne touche pas ces sujets, corrige-la quand même et mentionne-le dans la PR. Si tu n'as pas les droits pour modifier la fiche, écris la description et les sujets proposés dans la PR.
 
 ## Pour terminer
+0. **Avant de pousser**, lance localement le build et les tests du repo (voir « Propre à ce repo » ou le README). Ne pousse pas du code qui ne compile pas.
 1. Ouvre la PR avec `gh pr create` :
    - Titre : `type(portée): description (#no-issue)`
    - Description : **toutes** les sections du template remplies (Contexte, Changements, Comment tester, Impacts / risques), plus `Closes #<no-issue>`. Coche « Généré ou modifié par un agent AI ».
 2. Commente l'issue avec le lien de la PR et ce qui reste à valider par un humain.
-3. pr-guard et la CI tournent sur la PR. S'ils échouent, corrige dans la même branche avant de demander une revue.
+3. **Attends la fin des vérifications avant de dire que c'est fini** : `gh pr checks <no> --watch --fail-fast`
+   - Si un check échoue : lis l'erreur (`gh run view <id-du-run> --log-failed`), corrige dans la même branche, pousse, puis attends de nouveau.
+   - Recommence jusqu'à ce que tout soit vert. Ne dis **jamais** que le travail est terminé tant qu'un check est rouge ou encore en cours.
+   - Si l'échec existait déjà sur la branche de base (il ne vient pas de ta PR), ne le cache pas : dis-le dans la PR et dans l'issue, puis crée une issue pour le corriger s'il n'y en a pas.
 4. Ne merge pas toi-même, sauf si on te le demande explicitement. L'issue se ferme toute seule au merge grâce à `Closes #`.
 5. Si le travail est abandonné : ferme l'issue avec `gh issue close <no> --reason "not planned"` et un commentaire qui explique pourquoi, puis supprime la branche.
 

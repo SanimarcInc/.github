@@ -17,6 +17,7 @@ Tout repo qui n'a pas ses propres fichiers en hérite automatiquement :
 | `claude.yml` | *(non activé : pas de clé API)* Revue de code automatique des PR par Claude, et réponse aux mentions `@claude` | `templates/claude.yml` (secret `ANTHROPIC_API_KEY`) |
 | `ci-dotnet.yml` | restore, build, test .NET | `uses: SanimarcInc/.github/.github/workflows/ci-dotnet.yml@main` |
 | `ci-node.yml` | install, lint, test, build Node | `uses: SanimarcInc/.github/.github/workflows/ci-node.yml@main` |
+| `ci-validation.yml` | Syntaxe TypeScript/JavaScript, Python, JSON et YAML ; liens Markdown brisés en avertissement (repos de scripts et de documentation) | `uses: SanimarcInc/.github/.github/workflows/ci-validation.yml@main` |
 | `ci-php.yml` | syntaxe PHP, composer, tests Laravel en option | `uses: SanimarcInc/.github/.github/workflows/ci-php.yml@main` |
 
 ## Modèles (`templates/`)

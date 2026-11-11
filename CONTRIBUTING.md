@@ -52,7 +52,7 @@ Exemples : `feat(projet): filtre multiple des livrables (#142)`, `fix(acces): un
 
 ### Automatique sur chaque PR
 - **pr-guard** vérifie le standard (branche, titre, description, issue liée).
-- **CI** compile et lance les tests, selon la stack du repo.
+- **CI** compile et lance les tests, selon la stack du repo. On ne merge pas une PR dont la CI est rouge. Les agents attendent la fin de la CI et corrigent eux-mêmes avant de dire que c'est fini.
 - **Dependabot** ouvre chaque lundi des PR de mise à jour des dépendances, et tout de suite pour une faille de sécurité.
 
 ## 5. Règles pour les agents AI

@@ -1,0 +1,37 @@
+# CI réutilisable pour les repos de scripts et de documentation.
+# Échoue sur une erreur de syntaxe TypeScript/JavaScript, Python, JSON ou YAML.
+# Avertit (sans échouer) sur les liens relatifs brisés dans les fichiers Markdown.
+name: ci-validation
+on:
+  workflow_call:
+    inputs:
+      exclude:
+        description: "Expression régulière des chemins à ignorer (relatifs à la racine du repo)"
+        type: string
+        default: "^$"
+
+jobs:
+  validation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: SanimarcInc/.github
+          path: .org-github
+          sparse-checkout: scripts
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - name: Outils
+        run: |
+          npm install --no-save --no-audit --no-fund --prefix "$RUNNER_TEMP/tools" typescript@5.6.3
+          python3 -m pip install --quiet pyyaml
+      - name: Validation
+        env:
+          NODE_PATH: ${{ runner.temp }}/tools/node_modules
+          EXCLUDE: ${{ inputs.exclude }}
+        run: |
+          cd "$RUNNER_TEMP/tools"
+          node "$GITHUB_WORKSPACE/.org-github/scripts/validate.mjs" "$GITHUB_WORKSPACE" "^\.org-github/|$EXCLUDE"
